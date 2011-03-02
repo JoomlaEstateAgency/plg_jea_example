@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<install version="1.5" type="plugin" group="jea">
+	<name>JEA - Example</name>
+	<author>Sylvain Philip</author>
+	<creationDate>Feb 2011</creationDate>
+	<copyright>Copyright (C) 2011 Sylvain Philip.</copyright>
+	<license>http://www.gnu.org/licenses/gpl-2.0.html GNU/GPL</license>
+	<authorEmail>contact@sphilip.com</authorEmail>
+	<authorUrl>www.sphilip.com</authorUrl>
+	<version>1.0</version>
+	<description>An example jea plugin.</description>
+	
+	<files>
+		<filename plugin="example">example.php</filename>
+	</files>
+	
+	<params/>
+</install>
