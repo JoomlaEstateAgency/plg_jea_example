@@ -29,17 +29,14 @@ class plgJeaExample extends JPlugin
     /**
      * Constructor
      *
-     * For php4 compatability we must not use the __constructor as a constructor for plugins
-     * because func_get_args ( void ) returns a copy of all passed arguments NOT references.
-     * This causes problems with cross-referencing necessary for the observer design pattern.
-     *
-     * @param object $subject The object to observe
-     * @param object $params  The object that holds the plugin parameters
-     * @since 1.5
+     * @param       object  $subject The object to observe
+     * @param       array   $config  An array that holds the plugin configuration
      */
-    function plgJeaExample( &$subject, $params )
+    public function __construct(& $subject, $config)
     {
-        parent::__construct( $subject, $params );
+        parent::__construct($subject, $config);
+        // Load the plugin language files
+        $this->loadLanguage();
     }
 
 
@@ -53,8 +50,9 @@ class plgJeaExample extends JPlugin
      * @param boolean $is_new
      * @return boolean
      */
-    function onBeforeSaveProperty($namespace, &$row, $is_new)
+    public function onBeforeSaveProperty($namespace, &$row, $is_new)
     {
+        // $row->owner_name = JRequest::getVar( 'owner_name', '');
         return true;
     }
 
@@ -68,22 +66,35 @@ class plgJeaExample extends JPlugin
      * @param boolean $is_new
      * @return void
      */
-    function onAfterSaveProperty($namespace, &$row, $is_new)
+    public function onAfterSaveProperty($namespace, &$row, $is_new)
     {
-
+        // You can use this method to do a post-treatment (notification email ...)
     }
 
     /**
-     * onAfterLoadPropertyForm method
+     * onContentPrepareForm method
      *
      * Called after load the property form.
      *
-     * @param JForm $form
+	 * @param   JForm   $form  A JForm object.
+	 * @param   mixed   $data  The data expected for the form.
      * @return void
      */
-    function onAfterLoadPropertyForm(&$form)
+    public function onContentPrepareForm($form, $data)
     {
+        // You can use this method to alter the property form
+        // See the JForm Class {JOOMLA_PATH}/libraries/joomla/form/form.php
+        // See the JEA property form {JOOMLA_PATH}/administrator/components/com_jea/models/forms/property.xml
 
+        $xml = '<?xml version="1.0"?>
+<form>
+	<fieldset name="details">
+		<field name="owner_name" type="text" label="PLG_JEA_OWNER_NAME" />
+	</fieldset>
+</form>';
+        // This add a nex field in the fieldset details
+        // You can also load an XML file
+        $form->load($xml);
     }
 
     /**
@@ -92,10 +103,12 @@ class plgJeaExample extends JPlugin
      * @param TableProperties $row
      * @return void
      */
-    function onAfterStartPanels(&$row)
+    public function onAfterStartPanels(&$row)
     {
         echo JHtml::_('sliders.panel', 'Exemple start panel', 'test-start-panel');
-        echo '<fieldset class="panelform">Test start panel</fieldset>';
+        echo '<fieldset class="panelform">' 
+              . JText::_('PLG_JEA_OWNER_NAME'). ' : <strong>'
+              . $row->owner_name . '</strong></fieldset>';
     }
 
     /**
@@ -104,10 +117,12 @@ class plgJeaExample extends JPlugin
      * @param TableProperties $row
      * @return void
      */
-    function onBeforeEndPanels(&$row)
+    public function onBeforeEndPanels(&$row)
     {
-        echo JHtml::_('sliders.panel', 'Exemple end panel', 'test-start-panel');
-        echo '<fieldset class="panelform">Test end panel</fieldset>';
+        echo JHtml::_('sliders.panel', 'Exemple end panel', 'test-end-panel');
+        echo '<fieldset class="panelform">' 
+              . JText::_('PLG_JEA_OWNER_NAME'). ' : <strong>'
+              . $row->owner_name . '</strong></fieldset>';
     }
 
     /**
@@ -118,9 +133,17 @@ class plgJeaExample extends JPlugin
      *
      * @return void
      */
-    function onBeforeSearch(&$query, &$Modelstate)
+    public function onBeforeSearch(&$query, &$Modelstate)
     {
-
+        // Could be used to alter the search query in frontend
+        // ex :
+        $filter_owner = JRequest::getVar('filter_owner', '');
+        if (!empty($filter_owner)) {
+            $db = JFactory::getDbo();
+            $value = $db->Quote('%'.$db->escape($filter_owner, true).'%');
+            $search = '(p.owner_name LIKE '.$value;
+            $query->where($search);
+        }
     }
 
     /**
@@ -131,7 +154,9 @@ class plgJeaExample extends JPlugin
      */
     function onBeforeShowDescription(&$row)
     {
-        echo '<h3>onBeforeShowDescription</h3>';
+        echo '<h3>onBeforeShowDescription</h3>'
+              . JText::_('PLG_JEA_OWNER_NAME'). ' : <strong>'
+              . $row->owner_name . '</strong>';
     }
 
     /**
@@ -143,7 +168,9 @@ class plgJeaExample extends JPlugin
     function onAfterShowDescription(&$row)
     {
 
-        echo '<h3>onAfterShowDescription</h3>';
+        echo '<h3>onAfterShowDescription</h3>'
+              . JText::_('PLG_JEA_OWNER_NAME'). ' : <strong>'
+              . $row->owner_name . '</strong>';
     }
 
     /**
@@ -156,6 +183,7 @@ class plgJeaExample extends JPlugin
      */
     function onBeforeSendContactForm($data)
     {
+        // You can use this method to check contact form data and save, for instance, contact information in your database.
         return true;
     }
 
