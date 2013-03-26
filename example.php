@@ -126,6 +126,19 @@ class plgJeaExample extends JPlugin
     }
 
     /**
+     * onBeforeLoadProperty method (Called before load property in frontend)
+     *
+     * @param JDatabaseQueryElement $query
+     * @param JObject $Modelstate
+     *
+     * @return void
+     */
+    public function onBeforeLoadProperty(&$query, &$Modelstate)
+    {
+        $query->select('owner_name AS owner');
+    }
+
+    /**
      * onBeforeSearch method (Called before query properties list in frontend)
      *
      * @param JDatabaseQueryElement $query
