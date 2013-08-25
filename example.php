@@ -32,7 +32,7 @@ class plgJeaExample extends JPlugin
      * @param       object  $subject The object to observe
      * @param       array   $config  An array that holds the plugin configuration
      */
-    public function __construct(& $subject, $config)
+    public function __construct(&$subject, $config)
     {
         parent::__construct($subject, $config);
         // Load the plugin language files
@@ -50,7 +50,7 @@ class plgJeaExample extends JPlugin
      * @param boolean $is_new
      * @return boolean
      */
-    public function onBeforeSaveProperty($namespace, &$row, $is_new)
+    public function onBeforeSaveProperty($namespace, $row, $is_new)
     {
         // $row->owner_name = JRequest::getVar( 'owner_name', '');
         return true;
@@ -66,7 +66,7 @@ class plgJeaExample extends JPlugin
      * @param boolean $is_new
      * @return void
      */
-    public function onAfterSaveProperty($namespace, &$row, $is_new)
+    public function onAfterSaveProperty($namespace, $row, $is_new)
     {
         // You can use this method to do a post-treatment (notification email ...)
     }
