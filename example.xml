@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<install version="2.5" type="plugin" group="jea" method="upgrade">
+<extension version="2.5" type="plugin" group="jea" method="upgrade">
 	<name>JEA - Example</name>
 	<author>Sylvain Philip</author>
 	<creationDate>Feb 2011</creationDate>
@@ -21,5 +21,5 @@
 		<language tag="fr-FR">fr-FR.plg_jea_example.ini</language>
 	</languages>
 
-	<params />
-</install>
+	<config />
+</extension>
